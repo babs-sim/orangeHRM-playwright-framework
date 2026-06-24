@@ -3,16 +3,19 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage'
 import {DashboardPage} from "../pages/DashboardPage";
 import {AdminPage} from "../pages/AdminPage";
+import {RecruitmentPage} from "../pages/RecruitmentPage";
 
 let loginPage;
 let dashboardPage;
 let adminPage;
+let recruitmentPage;
 
 test.beforeEach(async ({page}) => {
 
   loginPage = new LoginPage(page);
   dashboardPage = new DashboardPage(page);
   adminPage = new AdminPage(page);
+  recruitmentPage = new RecruitmentPage(page);
 
   await page.goto('/');
 });
@@ -75,13 +78,24 @@ test('verify new user added', async ({page}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
-  await adminPage.verifyUserAdded("Hasan");
+  await adminPage.verifyUserAdded("testingusername1234");
 })
 
 test('Admin is able to search up users by username', async ({page}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
-  await adminPage.searchByUsername("Hasan", "(1) Record Found");
+  await adminPage.searchByUsername("testingusername1234", "(1) Record Found");
+})
+
+test.only('Recruitment is able to add candidate details', async ({page}) => {
+
+  await loginPage.login('Admin', 'admin123');
+  await dashboardPage.clickRecruitmentTab();
+  await recruitmentPage.clickAddCandidateButton();
+  await recruitmentPage.addCandidateDetails('Joe', 'Davis', 'Senior QA Lead', 'joedavis@email.com', '07123456789', '2026-05-02');
+  //await recruitmentPage.confirmConsentCheckbox();
+  await recruitmentPage.saveCandidateDetails();
+  await recruitmentPage.verifyCandidateAdded()
 })
 

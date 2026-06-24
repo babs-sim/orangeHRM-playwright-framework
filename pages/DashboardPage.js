@@ -15,4 +15,8 @@ export class DashboardPage {
     async clickAdminTab() {
         await this.adminButton.click();
     }
+
+    async clickRecruitmentTab() {
+        await this.recruitmentButton.click();
+    }
 }
