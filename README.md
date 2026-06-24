@@ -15,7 +15,7 @@ The framework automates test scenarios on: https://opensource-demo.orangehrmlive
 
 Clone the repository:
 ```
-git clone <url>
+git clone https://github.com/babs-sim/orangeHRM-playwright-framework.git
 ```
 
 Install dependencies:
