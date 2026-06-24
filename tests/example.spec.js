@@ -1,33 +1,6 @@
 // @ts-check
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage'
-import {DashboardPage} from "../pages/DashboardPage";
-import {AdminPage} from "../pages/AdminPage";
-import {RecruitmentPage} from "../pages/RecruitmentPage";
-
-let loginPage;
-let dashboardPage;
-let adminPage;
-let recruitmentPage;
-
-test.beforeEach(async ({page}) => {
-
-  loginPage = new LoginPage(page);
-  dashboardPage = new DashboardPage(page);
-  adminPage = new AdminPage(page);
-  recruitmentPage = new RecruitmentPage(page);
-
-  await page.goto('/');
-});
-
-test.afterEach(async ({page}) => {
-  await page.waitForTimeout(2000);
-
-  console.log(`Finished ${test.info().title} with status ${test.info().status}`);
-
-  if (test.info().status !== test.info().expectedStatus)
-    console.log(`Did not run as expected, ended up at ${page.url()}`);
-})
+import { expect } from '@playwright/test';
+import { test } from '../fixtures/baseTest';
 
 
 
@@ -38,26 +11,26 @@ test('Correct title appears', async ({ page }) => {
 
 });
 
-test('User logs in successfully', async ({page}) => {
+test('User logs in successfully', async ({page, loginPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await expect(page).toHaveURL('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
 });
 
 
-test('User cannot log in without credentials', async ({page}) => {
+test('User cannot log in without credentials', async ({page, loginPage}) => {
 
   await loginPage.login('', '');
   await loginPage.verifyRequiredTextAppears();
 });
 
-test('User cannot log in with invalid credentials', async ({page}) => {
+test('User cannot log in with invalid credentials', async ({page, loginPage}) => {
 
   await loginPage.login('Ad', '123');
   await loginPage.verifyErrorMessage('Invalid credentials');
 });
 
-test('User can add a new user in admin tab', async ({page}) => {
+test('User can add a new user in admin tab', async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
@@ -74,21 +47,21 @@ test('User can add a new user in admin tab', async ({page}) => {
   await adminPage.verifyUserAdded("testingusername1234");
 })
 
-test('verify new user added', async ({page}) => {
+test('verify new user added', async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
   await adminPage.verifyUserAdded("testingusername1234");
 })
 
-test('Admin is able to search up users by username', async ({page}) => {
+test('Admin is able to search up users by username', async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
   await adminPage.searchByUsername("testingusername1234", "(1) Record Found");
 })
 
-test.only('Recruitment is able to add candidate details', async ({page}) => {
+test('Recruitment is able to add candidate details', async ({page, loginPage, dashboardPage, adminPage, recruitmentPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickRecruitmentTab();
