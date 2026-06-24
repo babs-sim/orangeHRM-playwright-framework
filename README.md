@@ -30,3 +30,19 @@ npx playwright install
 ---
 # To run
 
+To run all test:
+```
+npm run test
+```
+To only run regression tests:
+```
+npm run test:regression
+```
+To only run sanity tests:
+```
+npm run test:sanity
+```
+To show report:
+```
+npm run report
+```

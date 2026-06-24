@@ -5,32 +5,32 @@ import { test } from '../fixtures/baseTest';
 
 
 
-test('Correct title appears', async ({ page }) => {
+test('@regression Correct title appears', async ({ page }) => {
 
   await expect(page).toHaveTitle('OrangeHRM');
 
 });
 
-test('User logs in successfully', async ({page, loginPage}) => {
+test('User logs in successfully', {tag: ['@regression', '@sanity']}, async ({page, loginPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await expect(page).toHaveURL('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
 });
 
 
-test('User cannot log in without credentials', async ({page, loginPage}) => {
+test('User cannot log in without credentials', {tag: '@regression'}, async ({page, loginPage}) => {
 
   await loginPage.login('', '');
   await loginPage.verifyRequiredTextAppears();
 });
 
-test('User cannot log in with invalid credentials', async ({page, loginPage}) => {
+test('User cannot log in with invalid credentials', {tag: '@regression'}, async ({page, loginPage}) => {
 
   await loginPage.login('Ad', '123');
   await loginPage.verifyErrorMessage('Invalid credentials');
 });
 
-test('User can add a new user in admin tab', async ({page, loginPage, dashboardPage, adminPage}) => {
+test('User can add a new user in admin tab', {tag: '@regression'}, async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
@@ -47,21 +47,21 @@ test('User can add a new user in admin tab', async ({page, loginPage, dashboardP
   await adminPage.verifyUserAdded("testingusername1234");
 })
 
-test('verify new user added', async ({page, loginPage, dashboardPage, adminPage}) => {
+test('verify new user added', {tag: '@regression'}, async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
   await adminPage.verifyUserAdded("testingusername1234");
 })
 
-test('Admin is able to search up users by username', async ({page, loginPage, dashboardPage, adminPage}) => {
+test('Admin is able to search up users by username', {tag: '@regression'}, async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
   await adminPage.searchByUsername("testingusername1234", "(1) Record Found");
 })
 
-test('Recruitment is able to add candidate details', async ({page, loginPage, dashboardPage, adminPage, recruitmentPage}) => {
+test('Recruitment is able to add candidate details', {tag: '@regression'}, async ({page, loginPage, dashboardPage, adminPage, recruitmentPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickRecruitmentTab();
