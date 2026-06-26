@@ -3,6 +3,7 @@ import { LoginPage } from '../pages/LoginPage'
 import {DashboardPage} from "../pages/DashboardPage";
 import {AdminPage} from "../pages/AdminPage";
 import {RecruitmentPage} from "../pages/RecruitmentPage";
+import {ClaimPage} from "../pages/claimPage";
 
 export const test = base.extend( {
 
@@ -20,6 +21,10 @@ export const test = base.extend( {
 
     recruitmentPage: async ({page}, use) => {
         await use(new RecruitmentPage(page));
+    },
+
+    claimPage: async ({page}, use) => {
+        await use(new ClaimPage(page));
     }
 
 });
