@@ -66,7 +66,7 @@ test('Recruitment is able to add candidate details', {tag: '@regression'}, async
   await recruitmentPage.verifyCandidateAdded()
 })
 
-test.only('Verify user sees correct total amount when making a claim', {tag: '@regression'}, async ({page, loginPage, dashboardPage, claimPage}) => {
+test('Verify user sees correct total amount when making a claim', {tag: '@regression'}, async ({page, loginPage, dashboardPage, claimPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickClaimTab();
