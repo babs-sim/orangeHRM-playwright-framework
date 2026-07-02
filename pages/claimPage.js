@@ -19,6 +19,14 @@ export class ClaimPage {
         this.saveExpenseButton = this.page.locator('//button[@type="submit"]');
         this.totalExpenseAmount = this.page.locator('(//p[@class="oxd-text oxd-text--p"])[1]');
         this.succesfullySaved = this.page.locator('//div[@class="oxd-toast-content oxd-toast-content--success"]');
+        this.submitClaimButton = this.page.getByRole('button', { name: 'Submit' });
+        this.expensePopup = this.page.locator('//div[@class="oxd-sheet oxd-sheet--rounded oxd-sheet--white oxd-dialog-sheet oxd-dialog-sheet--shadow oxd-dialog-sheet--gutters"]')
+
+        //My claims
+        this.myClaimsTabButton = this.page.getByRole('link', { name: 'My Claims' });
+        this.addMyClaimButton = this.page.getByRole('button', { name: 'Submit Claim' });
+        this.myEventRequestDropdownButton = this.page.locator('//form[@class="oxd-form"]/div[1]/div/div[1]/div/div[2]/div/div/div[2]');
+        this.myCurrencyRequestDropdownButton = this.page.locator('//form[@class="oxd-form"]/div[1]/div/div[2]/div/div[2]/div/div/div[2]')
 
     }
 
@@ -60,6 +68,12 @@ export class ClaimPage {
         await this.expenseAmount.fill(amount);
         await this.expenseNote.fill(notes);
         await this.saveExpenseButton.click();
+        //await expect(this.expensePopup).toHaveCount(0);
+    }
+
+    async submitClaim() {
+        //await page.waitForURL(/id/);
+        await this.submitClaimButton.click();
     }
 
     async verifyExpenseAmount(amount) {
@@ -69,5 +83,34 @@ export class ClaimPage {
     async verifySuccessfullySaved() {
         await this.succesfullySaved.waitFor({ state: 'visible'});
     }
+
+    async clickMyClaims() {
+        await this.myClaimsTabButton.click();
+    }
+
+    async createMyClaimRequest(event, currency, remark) {
+        await this.addMyClaimButton.click();
+        await this.myEventRequestDropdownButton.click();
+        this.myEventOptions = this.page.locator(`//div[@role="option"][normalize-space()= "${event}"]`);
+        await this.myEventOptions.click();
+
+        await this.myCurrencyRequestDropdownButton.click();
+        this.myCurrencyOptions = this.page.locator(`//div[@role="option"][normalize-space()= "${currency}"]`);
+        await this.myCurrencyOptions.click();
+
+        await this.remarkBox.fill(remark);
+        await this.createButton.click();
+    }
+
+    async verifySuccessfulSubmission() {
+        await expect(this.addExpense).toBeHidden();
+    }
+
+    // async submitClaim() {
+    //     await Promise.all([
+    //         this.page.waitForURL(/.*claim.*/, { waitUntil: 'networkidle' }),
+    //         this.submitClaimButton.click()
+    //     ]);
+    // }
 
 }

@@ -47,7 +47,7 @@ test('User can add a new user in admin tab', {tag: '@regression'}, async ({page,
   await adminPage.verifyUserAdded("testingusername12345");
 })
 
-test.only('Admin is able to search up users by username', {tag: '@regression'}, async ({page, loginPage, dashboardPage, adminPage}) => {
+test('Admin is able to search up users by username', {tag: '@regression'}, async ({page, loginPage, dashboardPage, adminPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickAdminTab();
@@ -67,19 +67,32 @@ test('Recruitment is able to add candidate details', {tag: '@regression'}, async
   await recruitmentPage.verifyCandidateAdded()
 })
 
-test('Verify user sees correct total amount when making a claim', {tag: '@regression'}, async ({page, loginPage, dashboardPage, claimPage}) => {
+test('Verify user can make a claim for worker', {tag: '@regression'}, async ({page, loginPage, dashboardPage, claimPage}) => {
 
   await loginPage.login('Admin', 'admin123');
   await dashboardPage.clickClaimTab();
   await claimPage.clickAssignClaim();
-  await claimPage.fillClaimRequest('Amelia', 'Amelia Brown', 'Accommodation', 'Pound Sterling', 'Booked a taxi and hotel');
+  await claimPage.fillClaimRequest('AutoeRMHx QA UserOKheR', 'AutoeRMHx QA UserOKheR', 'Accommodation', 'Pound Sterling', 'Booked a taxi and hotel');
   await page.waitForURL(/id/);
-  await claimPage.clickAddExpense()
-  await claimPage.fillExpenses('Fuel Allowance', '2026-19-03', '15.00', 'Hotel and taxi');
+  await claimPage.clickAddExpense();
+  await claimPage.fillExpenses('Fuel Allowance', '2026-19-03', '80.00', 'Hotel and taxi');
   await claimPage.verifySuccessfullySaved();
-  //await page.waitForURL(/assignClaim/);
-  //await claimPage.verifyExpenseAmount('15.00');
+  await claimPage.submitClaim();
+})
 
+test.only('Verify user can make a self-claim', {tag: '@regression'}, async ({page, loginPage, dashboardPage, claimPage}) => {
 
+  await loginPage.login('Admin', 'admin123');
+  await dashboardPage.clickClaimTab();
+  await claimPage.clickMyClaims();
+  await claimPage.createMyClaimRequest('House Rent', 'Pound Sterling', 'N/A');
+  await claimPage.verifySuccessfullySaved();
+  await claimPage.clickAddExpense();
+  await claimPage.fillExpenses('Fuel Allowance', '2026-19-03', '80.00', 'N/A');
+  await claimPage.verifySuccessfullySaved();
+  //await page.waitForURL(/id/);
+  await claimPage.submitClaim();
+  await page.waitForURL(/id/);
+  await claimPage.verifySuccessfulSubmission();
 })
 
